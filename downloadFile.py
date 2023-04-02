@@ -26,16 +26,21 @@ def downloadFile(id, file_type="pdb-model", folder="/tmp"):
         filepath_local: local filepath. None if download fails.
     """
     file_type = file_type.strip().lower()
-    if file_type == "pdb-model":
-        id = id.strip().lower()
-        url = f"https://files.wwpdb.org/pub/pdb/data/structures/divided/mmCIF/{id[1:3]}/{id}.cif.gz"
-    elif file_type == "pdb-validation":
-        id = id.strip().lower()
-        url = f"https://files.wwpdb.org/pub/pdb/validation_reports/{id[1:3]}/{id}/{id}_validation.cif.gz"
-    elif file_type == "ccd-definition":
-        id = id.strip().upper()
-        url = f"https://files.wwpdb.org/pub/pdb/refdata/chem_comp/{id[-1]}/{id}/{id}.cif"
-    else:
+    try:
+        if file_type == "pdb-model":
+            id = id.strip().lower()
+            url = f"https://files.wwpdb.org/pub/pdb/data/structures/divided/mmCIF/{id[1:3]}/{id}.cif.gz"
+        elif file_type == "pdb-validation":
+            id = id.strip().lower()
+            url = f"https://files.wwpdb.org/pub/pdb/validation_reports/{id[1:3]}/{id}/{id}_validation.cif.gz"
+        elif file_type == "ccd-definition":
+            id = id.strip().upper()
+            url = f"https://files.wwpdb.org/pub/pdb/refdata/chem_comp/{id[-1]}/{id}/{id}.cif"
+        else:
+            print("file_type argument %s is not supported" % file_type)
+            return None
+    except IndexError:
+        print("id %s is invalid" % id)
         return None
 
     filepath_local = os.path.join(folder, url.split('/')[-1])
@@ -45,12 +50,15 @@ def downloadFile(id, file_type="pdb-model", folder="/tmp"):
     except urllib.error.HTTPError as err_http:
         print(err_http)
         print("%s file doesn't exist for id %s, check id" % (file_type, id))
+        return None
     except OSError as err_os:
         print(err_os)
         print("cannot write file to the designated folder %s, check privilege" % folder)
+        return None
     except Exception as err_other:
         print(err_other)
         print("fail to download %s file for id %s" % (file_type, id))
+        return None
     else:
         if filepath_local.endswith(".gz"):
             filepath_local_unzipped = filepath_local.strip(".gz")
@@ -63,9 +71,9 @@ def downloadFile(id, file_type="pdb-model", folder="/tmp"):
             except Exception as err_unzip:
                 print(err_unzip)
                 print("cannot unzip %s, check file format or privilege in the folder" % filepath_local)
+                return None
         else:
             return filepath_local
-    return None  #return None for if any exception is encountered
 
 
 def main():
