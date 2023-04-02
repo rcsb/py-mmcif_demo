@@ -12,7 +12,7 @@ from mmcif.io.IoAdapterCore import IoAdapterCore
 from downloadFile import downloadFile
 
 
-class CCD():
+class CCD:
     """Class to process CCD file
     """
 
