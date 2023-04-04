@@ -1,6 +1,8 @@
 # py-mmcif_demo
 Demo using mmcif parser to parse PDBx/mmCIF-format files in the Protein Data Bank
 
+Before running the demo, plese install 'mmcif' package with pip install or from https://github.com/rcsb/py-mmcif
+
 1. parseSimple.py simplest code for using mmcif parser
 2. downloadFile.py a utility to download mmCIF-format file for coordinates, ligand definition, and validation report
 3. parseLigandOfInterestSimple.py demo cross-category mapping to find Ligand Of Interest (LOI) within a coordinates file
