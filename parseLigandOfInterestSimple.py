@@ -21,10 +21,10 @@ data_container = list_data_container[0]
 loi = data_container.getObj("pdbx_entity_instance_feature")
 # select the LOI category from data container
 
-l_index_doi = loi.selectIndices("SUBJECT OF INVESTIGATION","feature_type") 
+l_index_loi = loi.selectIndices("SUBJECT OF INVESTIGATION","feature_type") 
 # get list of indices by value/attribute pair, i.e. LOI
 
-ccd_id_1 = loi.getValue("comp_id", l_index_doi[0])
+ccd_id_1 = loi.getValue("comp_id", l_index_loi[0])
 print(ccd_id_1)
 # get LOI ligand CCD ID
 

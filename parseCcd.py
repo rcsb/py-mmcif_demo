@@ -11,7 +11,7 @@ from mmcif.io.IoAdapterCore import IoAdapterCore
 from downloadFile import downloadFile
 
 
-class CCD:
+class Ccd:
     """Class to process CCD file
     """
 
@@ -25,17 +25,21 @@ class CCD:
     def getDescriptor(self):
         descriptor = self.dc0.getObj('pdbx_chem_comp_descriptor')
         n_rows = descriptor.getRowCount()
+        l_descriptor = []
         for i in range(n_rows):
             d_row = descriptor.getRowAttributeDict(i)
             l_row = [d_row["type"], d_row["descriptor"]]
-            print(": ".join(l_row))    
+            l_descriptor.append(l_row)
+        return l_descriptor  
 
 
 def main():
     filepath = downloadFile("ATP", file_type="ccd-definition")
-    ccd = CCD()
+    ccd = Ccd()
     ccd.read(filepath)
-    ccd.getDescriptor()
+    l_descriptor = ccd.getDescriptor()
+    for l_row in l_descriptor:
+        print(": ".join(l_row))   
 
 
 if __name__ == "__main__":
