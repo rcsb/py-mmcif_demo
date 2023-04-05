@@ -4,21 +4,37 @@
 # Updates:
 # =============================================================================
 """
-mmmcif parser demo parsing Ligand Of Interest (LOI) from PDB entry 7TRT
+mmmcif parser demo parsing Ligand Of Interest (LOI) from PDB entry 7TRT,
+through a class
 """
 from mmcif.io.IoAdapterCore import IoAdapterCore
 from downloadFile import downloadFile
 
 
 class Pdbx:
+    """ a class to parse model coordinates file, can be modified to parse any
+    mmCIF data category or item
+    """
     def __init__(self):
+        """ initialize the mmcif parser io
+        """
         self.io = IoAdapterCore()
 
     def read(self, filepath_in):
-        self.l_dc = self.io.readFile(filepath_in)
-        self.dc0 = self.l_dc[0]
+        """ read the file contents into data containers
+
+        Args:
+            filepath_in (str): file path of coordinates file
+        """
+        self.l_dc = self.io.readFile(filepath_in)  #read into data containers
+        self.dc0 = self.l_dc[0]  #choose the 1st data container
 
     def findLoi(self):
+        """find Ligand of Intesest in the coordinates file
+
+        Returns:
+            list: list of CCD ids for LOI
+        """
         l_loi_id = []
         loi = self.dc0.getObj("pdbx_entity_instance_feature")
         l_index_loi = loi.selectIndices(
@@ -30,6 +46,14 @@ class Pdbx:
         return l_loi_id
 
     def getCoordinatesByCcdId(self, l_loi_id):
+        """get coordinates by the list of CCD ids. 
+
+        Args:
+            l_loi_id (list): list of LOI CCD ids
+
+        Returns:
+            list: list of rows of coordinates
+        """
         if not l_loi_id:
             return None
         coordinates = self.dc0.getObj('atom_site')

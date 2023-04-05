@@ -12,18 +12,38 @@ from downloadFile import downloadFile
 
 
 class Val:
+    """ class to parse validation report
+    """
     def __init__(self):
+        """ initialize the mmcif parser io
+        """
         self.io = IoAdapterCore()
 
     def read(self, filepath_in):
-        self.l_dc = self.io.readFile(filepath_in)
-        self.dc0 = self.l_dc[0]
+        """ read the file contents into data containers
+
+        Args:
+            filepath_in (str): file path of coordinates file
+        """
+        self.l_dc = self.io.readFile(filepath_in)  #read into data containers
+        self.dc0 = self.l_dc[0]  #choose the 1st data container
 
     def parseGeometrySummary(self):
+        """ parse overall geometry validation stats
+
+        Returns:
+            dict: dictionary of the stats
+        """
         summary = self.dc0.getObj('pdbx_vrpt_summary_geometry')
         return summary.getRowAttributeDict(0)
 
+    # get ligand instance id in model_instance category
     def parseLigand(self, ccd_id):
+        """ parse ligand validation stats by CCD id
+
+        Args:
+            ccd_id (str): CCD id
+        """
         self.d_lig_instance = {}
         model_instance = self.dc0.getObj("pdbx_vrpt_model_instance")
         l_index = model_instance.selectIndices(ccd_id, "label_comp_id") 
@@ -33,6 +53,7 @@ class Val:
             self.d_lig_instance[instance_id] = [d_row["auth_asym_id"], d_row["auth_seq_id"]]
         l_lig_instance = list(self.d_lig_instance.keys())
         
+        # check geometry quality
         geometry = self.dc0.getObj("pdbx_vrpt_model_instance_geometry")
         self.d_lig_geo = {}
         for instance_id in l_lig_instance:
@@ -42,6 +63,7 @@ class Val:
             self.d_lig_geo[instance_id]["bonds_RMSZ"] = d_row["bonds_RMSZ"]
             self.d_lig_geo[instance_id]["angles_RMSZ"] = d_row["angles_RMSZ"]
 
+        # check density fitting quality for X-ray entries
         fit = self.dc0.getObj("pdbx_vrpt_model_instance_density")
         self.d_lig_fit = {}
         for instance_id in l_lig_instance:

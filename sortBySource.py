@@ -14,6 +14,14 @@ from downloadFile import downloadFile
 
 
 def getSource(pdb_id):
+    """_summary_
+
+    Args:
+        pdb_id (str): pdb id
+
+    Returns:
+        dict: dictionary of the polymers and their sources
+    """
     filepath = downloadFile(pdb_id)
     io = IoAdapterCore()
     l_dc = io.readFile(filepath)
@@ -24,15 +32,16 @@ def getSource(pdb_id):
     entity = dc0.getObj("entity")
     for i in range(entity.getRowCount()):
         d_row_ent = entity.getRowAttributeDict(i)
-        if d_row_ent["type"] == "polymer":
+        if d_row_ent["type"] == "polymer":  #check macromolecule polymer only
             d_polymer[d_row_ent["id"]] = {}
-            d_polymer[d_row_ent["id"]
-                      ]["source_method"] = d_row_ent["src_method"]
-            d_polymer[d_row_ent["id"]]["name"] = d_row_ent["pdbx_description"]
+            d_polymer[d_row_ent["id"]]["source_method"] = d_row_ent["src_method"]  #get source method
+            d_polymer[d_row_ent["id"]]["name"] = d_row_ent["pdbx_description"]  #get molecule name
 
     for id in d_polymer:
         d_polymer[id]["source"] = []
-        if d_polymer[id]["source_method"] == "man":
+
+        # the source info is stored in different category based on source method
+        if d_polymer[id]["source_method"] == "man":  #for genetically manipulated
             src = dc0.getObj("entity_src_gen")
             for j in range(src.getRowCount()):
                 d_row_src = src.getRowAttributeDict(j)
@@ -40,7 +49,7 @@ def getSource(pdb_id):
                     source = d_row_src["pdbx_gene_src_scientific_name"].lower()
                     if source not in d_polymer[id]["source"]:
                         d_polymer[id]["source"].append(source)
-        if d_polymer[id]["source_method"] == "nat":
+        if d_polymer[id]["source_method"] == "nat":  #for naturally obtained
             src = dc0.getObj("entity_src_nat")
             for j in range(src.getRowCount()):
                 d_row_src = src.getRowAttributeDict(j)
@@ -48,7 +57,7 @@ def getSource(pdb_id):
                     source = d_row_src["pdbx_organism_scientific"].lower()
                     if source not in d_polymer[id]["source"]:
                         d_polymer[id]["source"].append(source)
-        if d_polymer[id]["source_method"] == "syn":
+        if d_polymer[id]["source_method"] == "syn":  #for synthetic molecule
             src = dc0.getObj("pdbx_entity_src_syn")
             for j in range(src.getRowCount()):
                 d_row_src = src.getRowAttributeDict(j)

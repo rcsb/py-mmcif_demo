@@ -38,7 +38,7 @@ print(nonpoly.getValue("name", l_index_nonpoly[0]))
 # get LOI ligand name
 
 coordinates = data_container.getObj('atom_site')
-# obtain data category from data container
+# select the coordinates data category from data container
 
 l_index = coordinates.selectIndices(ccd_id_1, "auth_comp_id")
 for i in l_index:

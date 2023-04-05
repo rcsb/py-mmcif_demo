@@ -12,17 +12,29 @@ from downloadFile import downloadFile
 
 
 class Ccd:
-    """Class to process CCD file
+    """ class to parse CCD chemical definition file
     """
 
     def __init__(self):
+        """ initialize the mmcif parser io
+        """
         self.io = IoAdapterCore()
 
     def read(self, filepath_in):
-        self.l_dc = self.io.readFile(filepath_in)
-        self.dc0 = self.l_dc[0]
+        """ read the file contents into data containers
+
+        Args:
+            filepath_in (str): file path of coordinates file
+        """
+        self.l_dc = self.io.readFile(filepath_in)  #read into data containers
+        self.dc0 = self.l_dc[0]  #choose the 1st data container
     
     def getDescriptor(self):
+        """ get chemical descriptor of various types
+
+        Returns:
+            list : list of descriptors
+        """
         descriptor = self.dc0.getObj('pdbx_chem_comp_descriptor')
         n_rows = descriptor.getRowCount()
         l_descriptor = []

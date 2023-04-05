@@ -18,7 +18,8 @@ from parseVal import Val
 
 def main():
     pdb_id = "7TRT"
-    pdbx = Pdbx()
+
+    pdbx = Pdbx()  #use class to parse coordinates file
     filepath_pdbx = downloadFile(pdb_id)  # download file
     pdbx.read(filepath_pdbx)
     l_loi_id = pdbx.findLoi()
@@ -27,7 +28,7 @@ def main():
     for l_row in l_loi_coord:
         print('\t'.join(l_row))
 
-    ccd = Ccd()
+    ccd = Ccd()  #use class to parse CCD ligand definition file
     for ccd_id in l_loi_id:
         filepath_ccd = downloadFile(ccd_id, file_type="ccd-definition")
         ccd.read(filepath_ccd)
@@ -35,7 +36,7 @@ def main():
         for l_row in l_descriptor:
             print(": ".join(l_row))
 
-    val = Val()
+    val = Val()  #use class to parse validation report file
     filepath_val = downloadFile(pdb_id, file_type="pdb-validation")
     val.read(filepath_val)
     for ccd_id in l_loi_id:
