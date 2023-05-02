@@ -44,6 +44,6 @@ l_index = coordinates.selectIndices(ccd_id_1, "auth_comp_id")
 for i in l_index:
     d_row = coordinates.getRowAttributeDict(i)
     l_value = [d_row["auth_comp_id"], d_row["auth_asym_id"], 
-               d_row["auth_seq_id"], d_row["Cartn_x"], 
-               d_row["Cartn_y"], d_row["Cartn_z"]]
+               d_row["auth_seq_id"], d_row["auth_atom_id"],
+               d_row["Cartn_x"], d_row["Cartn_y"], d_row["Cartn_z"]]
     print('\t'.join(l_value))
